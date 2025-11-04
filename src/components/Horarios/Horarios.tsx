@@ -32,7 +32,9 @@ export default function Horarios({ onSelectHora, data, selectedHora }: HorariosP
               <Text size={'title-md'} variant={'gray-200'}>{period}</Text>
               <div className="flex gap-2">
                 {periodTime.map((hora: ScheduleTimeProps) => {
-                  const disabled = scheduleClients.find((scheduled) => scheduled.timeId == hora.id && scheduled.date.toString().split("T")[0] === data)
+                  const disabled = scheduleClients.find((scheduled) => {
+                    return scheduled.timeId == hora.id && scheduled.date.toString().split("T")[0] === data || new Date(`${data}T${hora.hora}:00`) < new Date(Date.now())
+                  })
                   const isSelected = selectedHora == hora.id && !disabled
                   return <TimeSelect key={hora.id} disabled={!!disabled} selected={isSelected} onClick={(e) => handleClick(e, hora.id)}>{hora.hora}</TimeSelect>
                 })}
